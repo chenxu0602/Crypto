@@ -1,0 +1,10 @@
+############################################## Strategy: 3-Day Reversion #####################################
+Annualized Portfolio Return:         38.89%
+Annualized Portfolio Slip:           13.93%
+Annualized Portfolio Std:            36.68%
+Annualized Portfolio Sharpe ratio:   1.06
+Average number of long  positions:   7
+Average number of short positions:   8
+Average long  position:              46.15%
+Average short position:              -53.68%
+Portfolio Daily Turnover:            55.26%

@@ -1,0 +1,11 @@
+############################################## Strategy: BTCEUR-BTCUSD #####################################
+Annualized Portfolio Return:         145.19%
+Annualized Portfolio Slip:           305.64%
+Annualized Portfolio Std:            23.34%
+Annualized Portfolio Sharpe ratio:   6.22
+Average number of long  positions:   0
+Average number of short positions:   0
+Average long  position:              50.00%
+Average short position:              -50.00%
+Portfolio Daily Turnover:            2425.71%
+
