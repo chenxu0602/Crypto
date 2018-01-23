@@ -1,10 +1,54 @@
 
-import os, sys
+import os, sys, re
 import pandas as pd
 import matplotlib.pyplot as plt
 from collections import defaultdict
+from datetime import datetime
+import numpy as np
 
 #pd.set_option('display.expand_frame_repr', False)
+
+def load_minute_BTCEUR():
+    return load_minute_data("Bitstamp_BTCEUR_m.csv")
+
+def load_minute_BTCUSD():
+    return load_minute_data("Bitstamp_BTCUSD_m.csv")
+
+def load_minute_ETHEUR():
+    return load_minute_data("Bitstamp_ETHEUR_m.csv")
+
+def load_minute_ETHUSD():
+    return load_minute_data("Bitstamp_ETHUSD_m.csv")
+
+def load_minute_LTCBTC():
+    return load_minute_data("Bitstamp_LTCBTC_m.csv")
+
+def load_minute_LTCEUR():
+    return load_minute_data("Bitstamp_LTCEUR_m.csv")
+
+def load_minute_LTCUSD():
+    return load_minute_data("Bitstamp_LTCUSD_m.csv")
+
+def load_minute_XRPUSD():
+    return load_minute_data("Bitstamp_XRPUSD_m.csv")
+
+def load_minute_data(f):
+    print("Loading file {0} ...".format(f))
+    parser = lambda date: datetime.strptime(date[:-3], "%Y-%m-%d %H:%M")
+    return pd.read_csv(f, parse_dates=[0], index_col=[0], date_parser=parser)
+
+def minuteOHLC(data):
+    print("Generating OHLC data ...")
+    res = defaultdict(pd.DataFrame)
+    for fld in ["Open", "High", "Low", "Close"]:
+        resDict = {}
+        for sym in sorted(data.keys()):
+            resDict[sym] = data[sym][fld]
+        res[fld] = pd.DataFrame(resDict)
+    res["Ret"] = np.log(res["Close"]).diff()
+    return res
+
+
 
 def processRawData(fileName="crypto-markets.csv", start="2015-01-01", dump=True):
     if not os.path.exists(fileName):
@@ -80,6 +124,9 @@ def loadDailyField(directory, fld):
 
 
 if __name__ == "__main__":
+    pass
+
+    """
     res = processRawData()
     dailyOpen   = loadDailyOpen()
     dailyHigh   = loadDailyHigh()
@@ -87,3 +134,26 @@ if __name__ == "__main__":
     dailyClose  = loadDailyClose()
     dailyVolume = loadDailyVolume()
     dailyMktCap = loadDailyMktCap()
+    """
+
+    btceur = load_minute_BTCEUR()
+    btcusd = load_minute_BTCUSD()
+    etheur = load_minute_ETHEUR()
+    ethusd = load_minute_ETHEUR()
+    ltcbtc = load_minute_LTCBTC()
+    ltceur = load_minute_LTCEUR()
+    ltcusd = load_minute_LTCUSD()
+    xrpusd = load_minute_XRPUSD()
+
+    cryptoDict = {
+        "BTCEUR" : btceur,
+        "BTCUSD" : btcusd,
+        "ETHEUR" : etheur,
+        "ETHUSD" : ethusd,
+        "LTCBTC" : ltcbtc,
+        "LTCEUR" : ltceur,
+        "LTCUSD" : ltcusd,
+        "XRPUSD" : xrpusd
+    }
+
+    mdata  = minuteOHLC(cryptoDict)
