@@ -173,10 +173,6 @@ if __name__ == "__main__":
         intraSignal = pd.DataFrame(index=mdata["Close"].index,
             columns=["BTCEUR", "BTCUSD"])
         ratio = mdata["Close"]["BTCEUR"].div(mdata["Close"]["BTCUSD"])
-        """
-        mv  = ratio.rolling(window=20, min_periods=1).mean()
-        sd = ratio.rolling(window=20, min_periods=1).std()
-        """
         mv = ratio.ewm(span=120, min_periods=1, adjust=False).mean()
         sd = ratio.ewm(span=120, min_periods=1, adjust=False).std()
 
@@ -192,19 +188,47 @@ if __name__ == "__main__":
 
         return intraSignal.shift(1)
 
+    def BTC_LTC_ARB(data):
+        intraSignal = pd.DataFrame(index=mdata["Close"].index,
+            columns=["BTCUSD", "LTCUSD"])
+        ratio = mdata["Close"]["LTCUSD"].div(mdata["Close"]["BTCUSD"]).div(mdata["Close"]["LTCBTC"])
+        mv = ratio.ewm(span=30, min_periods=1, adjust=False).mean()
+        sd = ratio.ewm(span=30, min_periods=1, adjust=False).std()
+
+        longCondition  = ratio > mv + 2 * sd
+        shortCondition = ratio < mv - 2 * sd
+
+        intraSignal.loc[longCondition, "LTCUSD"] = -1.0
+        intraSignal.loc[longCondition, "BTCUSD"] = 1.0
+        intraSignal.loc[shortCondition, "LTCUSD"] = 1.0
+        intraSignal.loc[shortCondition, "BTCUSD"] = -1.0
+
+        intraSignal.fillna(method="ffill", inplace=True)
+
+        return intraSignal.shift(1)
+
 
     btcSignal = BTC_USD_EUR_ARB(mdata)
+    btcltcSignal = BTC_LTC_ARB(mdata)
 
     intraEqualWeight = pd.DataFrame(index=btcSignal.index, 
         columns=btcSignal.columns)
     intraEqualWeight.fillna(1.0 / len(intraEqualWeight.columns), inplace=True)
 
     intraStats = IntraPort("BTCEUR-BTCUSD", btcSignal, mdata["Close"], intraEqualWeight, 5)
+    intraStats2 = IntraPort("BTC-LTC", btcltcSignal, mdata["Close"], intraEqualWeight, 5)
 
+    """
     fig, ax = plt.subplots()
-    pd.DataFrame({"Cum PnL (BTCEUR-BTCUSD)": intraStats.portPnL.cumsum()}).plot(ax=ax, grid=True)
+    pd.DataFrame({"Cum PnL (BTC-LTC)": intraStats2.portPnL.cumsum()}).plot(ax=ax, grid=True)
     plt.legend(loc="best")
 
     import matplotlib.dates as mdates
     ax.xaxis.set_major_locator(mdates.WeekdayLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
+    """
+
+    """
+    pd.DataFrame({"Cum PnL (3-Day Reversion)": stats.portPnL.cumsum()}).plot(grid=True)
+    plt.legend(loc="best")
+    """
