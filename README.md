@@ -1,5 +1,4 @@
 # Crypto
-Cryptocurrency research
 
 crytocurrency data source: 
 
