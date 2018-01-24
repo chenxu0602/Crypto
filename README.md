@@ -15,7 +15,7 @@ Tested strategies:
 
     Strategy: Rank 3-Day risk adjusted returns, long the bottom half and short the top half.
 
-	 Transaction Cost: 10bps.
+	 Transaction Cost: 10bps one-way.
 
 
 2) Results/BTCEUR_BTCUSD
@@ -26,7 +26,7 @@ Tested strategies:
 
     Strategy: Volatiltity in EUR/USD is neglegible compared to volatilities of BTC/EUR and BTC/USD,     reversal strategy similar to bollinger band.
 
-	 Transaction Cost: 5bps.
+	 Transaction Cost: 5bps one-way.
 
 3) Results/BTC_LTC
 
@@ -36,4 +36,4 @@ Tested strategies:
 
     Strategy: Reversal strategy about ratio = BTC/USD.div(LTC/USD).div(BTC/LTC)
 
-	 Transaction Cost: 5bps.
+	 Transaction Cost: 5bps one-way.
