@@ -1,0 +1,10 @@
+############################################## Strategy: BTC-LTC #####################################
+Annualized Portfolio Return:         187.26%
+Annualized Portfolio Slip:           192.42%
+Annualized Portfolio Std:            55.38%
+Annualized Portfolio Sharpe ratio:   3.38
+Average number of long  positions:   0
+Average number of short positions:   0
+Average long  position:              50.00%
+Average short position:              -50.00%
+Portfolio Daily Turnover:            1527.14%
